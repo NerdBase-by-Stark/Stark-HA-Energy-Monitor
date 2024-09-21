@@ -1,7 +1,7 @@
 {
   "domain": "stark_energy_monitor",
   "name": "Stark Energy Monitor",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor",
   "requirements": [],
   "dependencies": [],
