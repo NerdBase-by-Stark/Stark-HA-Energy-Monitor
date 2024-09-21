@@ -7,7 +7,52 @@
         "description": "This wizard will guide you through setting up your energy monitoring system.",
         "data": {}
       },
-      // ... rest of the steps as in strings.json
+      "tariffs": {
+        "title": "Configure Tariffs",
+        "description": "Define your energy tariffs.",
+        "data": {
+          "tariffs": "Tariffs"
+        }
+      },
+      "devices": {
+        "title": "Select Devices",
+        "description": "Choose the devices you want to monitor.",
+        "data": {
+          "devices": "Devices"
+        }
+      },
+      "notifications": {
+        "title": "Notification Preferences",
+        "description": "Set up your notification preferences.",
+        "data": {
+          "threshold": "Energy Usage Threshold (kWh)",
+          "notification_methods": "Notification Methods",
+          "quiet_hours": "Quiet Hours (HH:MM-HH:MM)"
+        }
+      },
+      "solar": {
+        "title": "Solar Integration",
+        "description": "Configure solar energy monitoring.",
+        "data": {
+          "solar_integration": "Enable Solar Integration",
+          "solar_sensors": "Solar Sensors"
+        }
+      },
+      "battery": {
+        "title": "Battery Integration",
+        "description": "Configure battery storage monitoring.",
+        "data": {
+          "battery_integration": "Enable Battery Integration",
+          "battery_sensors": "Battery Sensors"
+        }
+      },
+      "critical_devices": {
+        "title": "Critical Devices",
+        "description": "Tag devices as critical for advanced monitoring.",
+        "data": {
+          "critical_devices": "Critical Devices"
+        }
+      }
     }
   }
 }
