@@ -1,0 +1,13 @@
+{
+  "title": "Stark Energy Monitor",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Welcome to Stark Energy Monitor",
+        "description": "This wizard will guide you through setting up your energy monitoring system.",
+        "data": {}
+      },
+      // ... rest of the steps as in strings.json
+    }
+  }
+}
