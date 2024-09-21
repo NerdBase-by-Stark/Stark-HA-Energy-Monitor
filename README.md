@@ -2,75 +2,76 @@
 
 ## Overview
 
-Stark Energy Monitor is a comprehensive Home Assistant integration that allows you to monitor your energy consumption, costs, solar production, battery storage, and receive notifications when thresholds are exceeded.
+Stark Energy Monitor is a comprehensive Home Assistant integration that allows you to monitor your energy consumption, costs, solar production, battery storage, and receive notifications when thresholds are exceeded. All configurations are handled through the Home Assistant UI, and the dashboard is automatically set up during installation.
 
 ## Features
 
-- **Real-Time Energy Tracking**: Monitor energy usage for all devices.
-- **Advanced Cost Calculations**: Supports complex tariff structures.
-- **Per-Device Monitoring**: Track individual device consumption.
-- **Solar and Battery Integration**: Monitor solar production and battery levels.
-- **Critical Device Alerts**: Receive alerts for critical devices.
-- **Customizable Dashboards**: Pre-configured dashboard with customizable cards.
-- **Notifications**: Configurable alerts with various notification methods.
-- **Data Retention Management**: Control how long data is stored.
-- **Voice Assistant Integration**: Interact with your energy data using voice commands.
+- **Real-Time Energy Tracking**
+- **Advanced Cost Calculations**
+- **Per-Device Monitoring**
+- **Solar and Battery Integration**
+- **Critical Device Alerts**
+- **Automatic Dashboard Setup**
+- **Notifications**
+- **Data Retention Management**
+- **Voice Assistant Integration**
 
 ## Installation
 
 ### Via HACS (Recommended)
 
-1. Open HACS in your Home Assistant instance.
-2. Go to the "Integrations" section.
-3. Click the "+" button to add a new integration.
-4. Click the three dots in the top right corner and select "Custom repositories".
-5. Add your repository URL:
+1. **Add Custom Repository to HACS**:
 
-   - **Repository**: `https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor`
-   - **Category**: Integration
+   - Open HACS in Home Assistant.
+   - Go to **Integrations**.
+   - Click the three dots and select **Custom repositories**.
+   - Add:
 
-6. After adding the repository, find **Stark Energy Monitor** in the list of integrations and install it.
-7. Restart Home Assistant.
+     - **Repository**: `https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor`
+     - **Category**: Integration
 
-### Manual Installation
+2. **Install the Integration**:
 
-1. Clone or download this repository.
-2. Copy the `custom_components/stark_energy_monitor` directory to your Home Assistant's `custom_components` directory.
-3. Copy the `dashboard/stark_energy_monitor_dashboard.yaml` to your Home Assistant's `lovelace` directory.
-4. Restart Home Assistant.
+   - Find **Stark Energy Monitor** in HACS and install it.
 
-## Configuration
+3. **Restart Home Assistant**.
 
-### Using the UI
+### Configuration
 
-1. Go to **Configuration** > **Integrations** in Home Assistant.
-2. Click on **Add Integration** and search for **Stark Energy Monitor**.
-3. Follow the wizard to set up your tariffs, devices, and preferences.
+1. **Add the Integration**:
 
-### Configuration Options
+   - Go to **Configuration** > **Integrations**.
+   - Click **Add Integration** and select **Stark Energy Monitor**.
 
-- **Tariffs**: Define multiple tariffs with rates, times, and days.
-- **Devices**: Select which devices to monitor.
-- **Notifications**: Set thresholds, methods, and quiet hours.
-- **Solar and Battery**: Enable integration and select sensors.
-- **Critical Devices**: Tag devices for advanced monitoring.
+2. **Follow the Setup Wizard**:
+
+   - Configure tariffs, devices, notifications, and other settings via the UI.
 
 ## Usage
 
-- Access the Stark Energy Monitor dashboard via Home Assistant UI.
-- View real-time and historical energy consumption, costs, and more.
-- Receive notifications based on your preferences.
+- **Access the Dashboard**:
+
+  - Click on **Stark Energy Monitor** in the Home Assistant sidebar.
+
+- **View Energy Data**:
+
+  - The dashboard displays real-time and historical energy data, costs, solar production, battery status, and more.
 
 ## Updating
 
-- Updates can be managed directly through HACS.
-- For manual installations, repeat the installation steps with the new version.
+- **Via HACS**:
+
+  - Updates are managed through HACS.
 
 ## Troubleshooting
 
-- Ensure all sensors are correctly configured in Home Assistant.
-- Check the logs for any error messages related to the `stark_energy_monitor` integration.
-- Restart Home Assistant after making changes.
+- **No Manual Configurations Required**:
+
+  - All settings are handled via the UI.
+
+- **Check Logs**:
+
+  - If issues arise, check the Home Assistant logs for errors related to the integration.
 
 ## License
 
