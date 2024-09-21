@@ -1,0 +1,31 @@
+title: Stark Energy Monitor Dashboard
+views:
+  - title: Overview
+    path: overview
+    cards:
+      - type: custom:stark-energy-monitor-card
+        entity: sensor.total_energy_consumption
+      - type: custom:stark-energy-monitor-chart
+        entities:
+          - sensor.total_energy_consumption
+          - sensor.energy_cost
+      - type: entities
+        title: Devices
+        entities:
+          - sensor.energy_consumption_device_1
+          - sensor.energy_consumption_device_2
+          # Add more devices as needed
+      - type: custom:solar-energy-card
+        entity: sensor.total_solar_production
+      - type: custom:battery-status-card
+        entity: sensor.battery_level
+      - type: custom:energy-flow-card
+        grid_entity: sensor.grid_energy
+        solar_entity: sensor.total_solar_production
+        battery_entity: sensor.battery_level
+        home_entity: sensor.total_energy_consumption
+      - type: entities
+        title: Critical Devices
+        entities:
+          - binary_sensor.critical_device_device_1_status
+          # Add more critical devices as needed
