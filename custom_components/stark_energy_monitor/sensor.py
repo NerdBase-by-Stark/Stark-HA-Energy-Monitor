@@ -1,10 +1,8 @@
-"""Sensor platform for Stark Energy Monitor."""
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import ENERGY_KILO_WATT_HOUR
-from homeassistant.core import HomeAssistant
 from .const import DOMAIN
 
-async def async_setup_entry(hass: HomeAssistant, entry, async_add_entities):
+async def async_setup_entry(hass, entry, async_add_entities):
     """Set up sensors for Stark Energy Monitor."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     sensors = [
