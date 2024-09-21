@@ -1,6 +1,8 @@
- """Notifications."""
+"""Notifications for Stark Energy Monitor."""
 from homeassistant.components.notify import BaseNotificationService
-from .const import DOMAIN
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 async def async_get_service(hass, config, discovery_info=None):
     """Set up the notification service."""
