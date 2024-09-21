@@ -1,11 +1,11 @@
 {
   "domain": "stark_energy_monitor",
   "name": "Stark Energy Monitor",
-  "version": "0.2.0",
+  "version": "1.2.0",
   "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor",
-  "requirements": [],
   "dependencies": [],
   "codeowners": ["@NerdBase-by-Stark"],
   "config_flow": true,
-  "iot_class": "local_polling"
+  "iot_class": "local_polling",
+  "extra_js_url": "/local/stark_energy_monitor_card.js"
 }
