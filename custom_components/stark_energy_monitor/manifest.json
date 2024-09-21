@@ -1,10 +1,10 @@
 {
-    "domain": "stark_energy_monitor",
-    "name": "Stark Energy Monitor",
-    "version": "1.0.0",
-    "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor",
-    "requirements": [],
-    "dependencies": [],
-    "codeowners": ["@NerdBase-by-Stark"],
-    "config_flow": true
+  "domain": "stark_energy_monitor",
+  "name": "Stark Energy Monitor",
+  "version": "1.0.0",
+  "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@NerdBase-by-Stark"],
+  "config_flow": true
 }
