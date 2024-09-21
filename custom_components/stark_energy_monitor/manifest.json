@@ -3,6 +3,7 @@
   "name": "Stark Energy Monitor",
   "version": "1.0.0",
   "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor",
+    "logo": "custom_components/stark_energy_monitor/www/stark_logo.png",
   "dependencies": [],
   "codeowners": ["@NerdBase-by-Stark"],
   "requirements": ["pandas>=1.1.5"],
