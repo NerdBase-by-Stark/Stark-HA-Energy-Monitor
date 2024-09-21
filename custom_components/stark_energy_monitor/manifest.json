@@ -7,5 +7,11 @@
   "codeowners": ["@NerdBase-by-Stark"],
   "requirements": ["pandas>=1.1.5"],
   "iot_class": "local_polling",
-  "config_flow": true
+  "config_flow": true,
+  "panel_custom": {
+    "name": "stark_energy_monitor",
+    "embed_iframe": true,
+    "trust_external": false,
+    "js_url": "/stark_energy_monitor_panel.js"
+  }
 }
