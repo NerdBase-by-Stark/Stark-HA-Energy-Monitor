@@ -1,15 +1,14 @@
 """Config flow for Stark Energy Monitor integration."""
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_NAME
 from homeassistant.helpers import selector
+from homeassistant.helpers import config_validation as cv
 
 from .const import (
     DOMAIN,
     CONF_TARIFFS,
     CONF_DEVICES,
     CONF_NOTIFICATION_PREFERENCES,
-    CONF_DATA_RETENTION_DAYS,
     CONF_SOLAR_INTEGRATION,
     CONF_SOLAR_SENSORS,
     CONF_BATTERY_INTEGRATION,
@@ -29,15 +28,7 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         """Handle the initial step."""
-        if user_input is not None:
-            self._data.update(user_input)
-            return await self.async_step_tariffs()
-
-        return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema({}),
-            errors=self._errors,
-        )
+        return await self.async_step_tariffs()
 
     async def async_step_tariffs(self, user_input=None):
         """Configure tariff rates and times."""
@@ -46,15 +37,18 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return await self.async_step_devices()
 
         tariff_schema = vol.Schema({
-            vol.Required(CONF_TARIFFS): [
-                {
-                    vol.Required("tariff_name"): str,
-                    vol.Required("rate"): vol.Coerce(float),
-                    vol.Required("start_time"): str,
-                    vol.Required("end_time"): str,
-                    vol.Optional("days", default=["mon", "tue", "wed", "thu", "fri", "sat", "sun"]): [str],
-                }
-            ]
+            vol.Required(CONF_TARIFFS): vol.All(
+                cv.ensure_list,
+                [
+                    vol.Schema({
+                        vol.Required("tariff_name"): str,
+                        vol.Required("rate"): vol.Coerce(float),
+                        vol.Required("start_time"): str,
+                        vol.Required("end_time"): str,
+                        vol.Optional("days", default=["mon", "tue", "wed", "thu", "fri", "sat", "sun"]): [str],
+                    })
+                ]
+            )
         })
 
         return self.async_show_form(
