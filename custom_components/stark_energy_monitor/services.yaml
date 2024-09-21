@@ -1,4 +1,4 @@
-# Service definitions for Stark Energy Monitor
+# File: custom_components/stark_energy_monitor/services.yaml
 
 set_tariff:
   name: Set Tariff
