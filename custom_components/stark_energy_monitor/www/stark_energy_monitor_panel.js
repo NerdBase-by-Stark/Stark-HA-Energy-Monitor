@@ -1,3 +1,5 @@
+// File: custom_components/stark_energy_monitor/www/stark_energy_monitor_panel.js
+
 class StarkEnergyMonitorPanel extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
@@ -5,7 +7,6 @@ class StarkEnergyMonitorPanel extends HTMLElement {
         /* Styles for your panel */
       </style>
       <div id="content">
-        <!-- Your panel content -->
         <h1>Stark Energy Monitor Dashboard</h1>
         <p>Loading data...</p>
       </div>
@@ -17,7 +18,6 @@ class StarkEnergyMonitorPanel extends HTMLElement {
     // Fetch data from your integration
     const hass = document.querySelector('home-assistant').hass;
     const data = await hass.callApi('GET', 'stark_energy_monitor/data');
-    // Render data into the panel
     this._renderData(data);
   }
 
