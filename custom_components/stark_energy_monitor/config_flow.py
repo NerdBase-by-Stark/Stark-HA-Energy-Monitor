@@ -3,7 +3,7 @@ import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
-from .const import DOMAIN  # Replace with your actual constants file
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -12,42 +12,37 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    def __init__(self):
-        """Initialize the configuration flow."""
-        self._errors = {}
-
     async def async_step_user(self, user_input=None):
-        """Handle the initial step."""
+        """Handle the initial step of the config flow."""
         errors = {}
-        
+
         if user_input is not None:
-            # You can perform validation of user input here if necessary
+            # You can add validation logic here
             return self.async_create_entry(
                 title=user_input.get("monitor_name", "Stark Energy Monitor"),
                 data=user_input
             )
 
-        # Define the schema of the form
+        # Define the form schema
         data_schema = vol.Schema({
-            vol.Required("monitor_name", default="Stark Energy Monitor"): str,  # Optional naming field
-            vol.Required("sample_interval", default=60): vol.All(vol.Coerce(int), vol.Range(min=1)),  # Custom sample interval
-            # Add other fields here if required
+            vol.Required("monitor_name", default="Stark Energy Monitor"): str,
+            vol.Required("sample_interval", default=60): vol.All(vol.Coerce(int), vol.Range(min=1)),
         })
 
         return self.async_show_form(
             step_id="user",
             data_schema=data_schema,
-            errors=errors,
+            errors=errors
         )
 
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        """Get the options flow handler."""
+        """Handle options flow."""
         return StarkEnergyMonitorOptionsFlow(config_entry)
 
 class StarkEnergyMonitorOptionsFlow(config_entries.OptionsFlow):
-    """Handle the options flow for Stark Energy Monitor."""
+    """Handle an options flow for Stark Energy Monitor."""
 
     def __init__(self, config_entry):
         """Initialize the options flow."""
@@ -58,9 +53,10 @@ class StarkEnergyMonitorOptionsFlow(config_entries.OptionsFlow):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
+        # Options schema for managing the options
         options_schema = vol.Schema({
             vol.Optional("enable_notifications", default=True): bool,
-            vol.Optional("data_retention_days", default=30): vol.Coerce(int),  # For example, allow setting data retention days
+            vol.Optional("data_retention_days", default=30): vol.Coerce(int),
         })
 
         return self.async_show_form(
