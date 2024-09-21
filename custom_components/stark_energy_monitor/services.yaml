@@ -1,0 +1,25 @@
+# Service definitions for Stark Energy Monitor
+
+set_tariff:
+  name: Set Tariff
+  description: Set new tariff rates.
+  fields:
+    tariffs:
+      description: List of tariff configurations.
+      example:
+        - tariff_name: "Peak"
+          rate: 0.20
+          start_time: "17:00"
+          end_time: "21:00"
+        - tariff_name: "Off-Peak"
+          rate: 0.10
+          start_time: "21:00"
+          end_time: "17:00"
+
+send_energy_alert:
+  name: Send Energy Alert
+  description: Manually trigger an energy alert.
+  fields:
+    message:
+      description: Alert message to send.
+      example: "Energy usage has exceeded the threshold."
