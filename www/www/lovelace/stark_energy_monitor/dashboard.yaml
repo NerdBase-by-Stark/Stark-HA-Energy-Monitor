@@ -1,0 +1,30 @@
+title: Stark Energy Monitor
+views:
+  - title: Energy Overview
+    path: energy_overview
+    cards:
+      - type: 'custom:stark-energy-monitor-card'
+        entity: sensor.real_time_consumption
+      - type: entities
+        title: Energy Consumption
+        entities:
+          - sensor.total_consumption
+          - sensor.real_time_consumption
+          - sensor.per_device_consumption
+      - type: gauge
+        title: Real-Time Consumption
+        entity: sensor.real_time_consumption
+        min: 0
+        max: 5000
+        unit: "W"
+      - type: history-graph
+        title: Energy Usage History
+        entities:
+          - sensor.total_consumption
+        hours_to_show: 168
+        refresh_interval: 300
+      - type: entities
+        title: Solar & Battery
+        entities:
+          - sensor.solar_production
+          - sensor.battery_status
