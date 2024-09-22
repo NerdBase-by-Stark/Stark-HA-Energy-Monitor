@@ -1,31 +1,30 @@
-title: Stark Energy Monitor Dashboard
+title: Stark Energy Monitor
 views:
-  - title: Overview
-    path: overview
+  - title: Energy Overview
+    path: energy_overview
     cards:
-      - type: custom:stark-energy-monitor-card
-        entity: sensor.total_energy_consumption
-      - type: custom:stark-energy-monitor-chart
-        entities:
-          - sensor.total_energy_consumption
-          - sensor.energy_cost
+      - type: 'custom:stark-energy-monitor-card'
+        entity: sensor.real_time_consumption
       - type: entities
-        title: Devices
+        title: Energy Consumption
         entities:
-          - sensor.energy_consumption_device_1
-          - sensor.energy_consumption_device_2
-          # Add more devices as needed
-      - type: custom:solar-energy-card
-        entity: sensor.total_solar_production
-      - type: custom:battery-status-card
-        entity: sensor.battery_level
-      - type: custom:energy-flow-card
-        grid_entity: sensor.grid_energy
-        solar_entity: sensor.total_solar_production
-        battery_entity: sensor.battery_level
-        home_entity: sensor.total_energy_consumption
+          - sensor.total_consumption
+          - sensor.real_time_consumption
+          - sensor.per_device_consumption
+      - type: gauge
+        title: Real-Time Consumption
+        entity: sensor.real_time_consumption
+        min: 0
+        max: 5000
+        unit: "W"
+      - type: history-graph
+        title: Energy Usage History
+        entities:
+          - sensor.total_consumption
+        hours_to_show: 168
+        refresh_interval: 300
       - type: entities
-        title: Critical Devices
+        title: Solar & Battery
         entities:
-          - binary_sensor.critical_device_device_1_status
-          # Add more critical devices as needed
+          - sensor.solar_production
+          - sensor.battery_status

@@ -1,26 +1,56 @@
-from homeassistant.components.binary_sensor import BinarySensorEntity
+# binary_sensor.py
+import logging
+from homeassistant.helpers.entity import BinarySensorEntity
+
 from .const import DOMAIN
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up binary sensors for Stark Energy Monitor."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    sensors = [CriticalDeviceSensor(coordinator)]
-    async_add_entities(sensors, True)
+_LOGGER = logging.getLogger(__name__)
 
-class CriticalDeviceSensor(BinarySensorEntity):
-    """Binary sensor for monitoring critical devices."""
+class StarkEnergyMonitorBinarySensor(BinarySensorEntity):
+    """Representation of a Stark Energy Monitor binary sensor."""
 
-    def __init__(self, coordinator):
-        """Initialize the sensor."""
-        self.coordinator = coordinator
-        self._attr_name = "Critical Device Status"
-        self._attr_is_on = False
+    def __init__(self, hass, config_entry, name, icon):
+        """Initialize the binary sensor."""
+        self._hass = hass
+        self._config = config_entry.data
+        self._name = name
+        self._icon = icon
+        self._is_on = False
+
+    @property
+    def name(self):
+        """Return the name of the binary sensor."""
+        return self._name
 
     @property
     def is_on(self):
-        """Return true if the device is operating normally."""
-        return self.coordinator.get("critical_device_status", False)
+        """Return the state of the binary sensor."""
+        return self._is_on
+
+    @property
+    def icon(self):
+        """Return the icon."""
+        return self._icon
 
     async def async_update(self):
-        """Update the sensor state."""
-        await self.coordinator.async_request_refresh()
+        """Fetch new state data for the binary sensor."""
+        try:
+            _LOGGER.debug(f"Fetching status for binary sensor: {self._name}")
+            # Implement your data fetching logic here
+            # Example:
+            # self._is_on = await check_critical_device_status(self._config)
+            self._is_on = False  # Placeholder value for testing
+            _LOGGER.debug(f"Updated {self._name} to state: {self._is_on}")
+        except Exception as e:
+            _LOGGER.error(f"Error updating binary sensor {self._name}: {e}")
+            self._is_on = False
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up Stark Energy Monitor binary sensors."""
+    binary_sensors = [
+        StarkEnergyMonitorBinarySensor(
+            hass, config_entry, "Critical Device Alert", "mdi:alert-circle"
+        ),
+        # Add more binary sensors as needed
+    ]
+    async_add_entities(binary_sensors, update_before_add=True)
