@@ -7,20 +7,17 @@
   "requirements": ["voluptuous>=0.12.0"],
   "codeowners": ["@NerdBase-by-Stark"],
   "config_flow": true,
+  "single_config_entry": true,
   "iot_class": "local_polling",
   "integration_type": "hub",
-  "supported_brands": ["Stark"],
   "quality_scale": "silver",
   "issue_tracker": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor/issues",
-  "loggers": ["custom_components.stark_energy_monitor"],
+  "loggers": ["stark_energy_monitor"],
   "homeassistant": "2023.10.0",
   "hacs": {
     "name": "Stark Energy Monitor",
     "content_in_root": false,
-    "domains": ["stark_energy_monitor"],
-    "country": ["US", "UK", "DE", "AU"],
     "render_readme": true,
-    "zip_release": false,
-    "iot_class": "Local Polling"
+    "zip_release": false
   }
 }

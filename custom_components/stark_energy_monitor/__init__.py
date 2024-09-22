@@ -6,6 +6,12 @@ from homeassistant.config_entries import ConfigEntry
 from .const import DOMAIN, PLATFORMS
 from .coordinator import StarkEnergyMonitorCoordinator
 
+# Pre-import platform modules to avoid blocking calls during setup
+from . import sensor
+from . import binary_sensor
+from . import switch
+from . import notify
+
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -22,11 +28,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         "coordinator": coordinator,
     }
 
-    # Forward setup to all platforms using hass.async_create_task
-    for platform in PLATFORMS:
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, platform)
-        )
+    # Forward setup to all platforms
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     _LOGGER.info("Stark Energy Monitor setup complete")
     return True
