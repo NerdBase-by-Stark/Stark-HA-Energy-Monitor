@@ -5,12 +5,11 @@
   "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor#readme",
   "dependencies": [],
   "requirements": ["voluptuous>=0.12.0"],
-  "codeowners": ["@YourGitHubUsername"],
+  "codeowners": ["@Nerdbase-by-Stark"],
   "config_flow": true,
   "iot_class": "local_polling",
   "frontend": {
     "js_url": "/local/stark_energy_monitor_card.js",
-    "css_url": "/local/stark_energy_monitor_card.css",
     "module": true
   }
 }
