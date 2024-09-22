@@ -21,9 +21,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data[DOMAIN][entry.entry_id] = {
         "coordinator": coordinator,
     }
-    
-    # Forward setup to all platforms
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Forward setup to all platforms using hass.async_create_task
+    for platform in PLATFORMS:
+        hass.async_create_task(
+            hass.config_entries.async_forward_entry_setup(entry, platform)
+        )
 
     _LOGGER.info("Stark Energy Monitor setup complete")
     return True

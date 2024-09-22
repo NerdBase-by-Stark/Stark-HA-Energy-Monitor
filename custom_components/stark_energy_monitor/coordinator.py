@@ -18,10 +18,11 @@ class StarkEnergyMonitorCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Fetch data from the source."""
-        # Simulate data fetching (replace with actual data fetching logic)
+        # Replace with actual data fetching logic
         data = {
-            "total_energy": 100,  # kWh
-            "total_cost": 20,     # $
+            "Total Consumption": 100,        # kWh
+            "Real-Time Consumption": 5000,   # W
+            "Critical Device Alert": False,  # Binary sensor state
             "device_control": self.device_control,
         }
         return data
