@@ -2,14 +2,11 @@
 import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_NAME
 
-from .sensor import StarkEnergyMonitorSensor
-from .binary_sensor import StarkEnergyMonitorBinarySensor
+from .const import DOMAIN, PLATFORMS
+from .coordinator import StarkEnergyMonitorCoordinator
 
 _LOGGER = logging.getLogger(__name__)
-
-DOMAIN = "stark_energy_monitor"
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Stark Energy Monitor component."""
@@ -18,23 +15,22 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up Stark Energy Monitor from a config entry."""
-    hass.data[DOMAIN][entry.entry_id] = {}
+    coordinator = StarkEnergyMonitorCoordinator(hass)
+    await coordinator.async_config_entry_first_refresh()
+
+    hass.data[DOMAIN][entry.entry_id] = {
+        "coordinator": coordinator,
+    }
     
-    # Initialize sensors and binary sensors
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
-    )
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "binary_sensor")
-    )
+    # Forward setup to all platforms
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     _LOGGER.info("Stark Energy Monitor setup complete")
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
-    unload_ok &= await hass.config_entries.async_forward_entry_unload(entry, "binary_sensor")
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 

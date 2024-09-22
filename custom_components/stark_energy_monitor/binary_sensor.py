@@ -1,6 +1,6 @@
-# binary_sensor.py
 import logging
 from homeassistant.helpers.entity import BinarySensorEntity
+from homeassistant.config_entries import ConfigEntry
 
 from .const import DOMAIN
 
@@ -9,7 +9,7 @@ _LOGGER = logging.getLogger(__name__)
 class StarkEnergyMonitorBinarySensor(BinarySensorEntity):
     """Representation of a Stark Energy Monitor binary sensor."""
 
-    def __init__(self, hass, config_entry, name, icon):
+    def __init__(self, hass, config_entry: ConfigEntry, name: str, icon: str):
         """Initialize the binary sensor."""
         self._hass = hass
         self._config = config_entry.data
@@ -29,7 +29,7 @@ class StarkEnergyMonitorBinarySensor(BinarySensorEntity):
 
     @property
     def icon(self):
-        """Return the icon."""
+        """Return the icon of the binary sensor."""
         return self._icon
 
     async def async_update(self):
