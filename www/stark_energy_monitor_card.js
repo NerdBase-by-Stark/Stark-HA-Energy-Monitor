@@ -1,3 +1,4 @@
+// stark_energy_monitor_card.js
 class StarkEnergyMonitorCard extends HTMLElement {
   setConfig(config) {
     if (!config || !config.entity) {

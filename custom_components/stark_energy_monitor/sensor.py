@@ -6,19 +6,6 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up Stark Energy Monitor sensors."""
-    sensors = [
-        StarkEnergyMonitorSensor(
-            hass, config_entry, "Total Consumption", ENERGY_KILO_WATT_HOUR, "mdi:flash"
-        ),
-        StarkEnergyMonitorSensor(
-            hass, config_entry, "Real-Time Consumption", POWER_WATT, "mdi:flash-circle"
-        ),
-        # Add more sensors as needed
-    ]
-    async_add_entities(sensors, update_before_add=True)
-
 class StarkEnergyMonitorSensor(Entity):
     """Representation of a Stark Energy Monitor sensor."""
 
@@ -54,10 +41,25 @@ class StarkEnergyMonitorSensor(Entity):
     async def async_update(self):
         """Fetch new state data for the sensor."""
         try:
+            _LOGGER.debug(f"Fetching data for sensor: {self._name}")
             # Implement your data fetching logic here
             # Example:
             # self._state = await fetch_energy_data(self._config)
             self._state = 0  # Placeholder value for testing
+            _LOGGER.debug(f"Updated {self._name} to state: {self._state}")
         except Exception as e:
             _LOGGER.error(f"Error updating sensor {self._name}: {e}")
             self._state = None
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up Stark Energy Monitor sensors."""
+    sensors = [
+        StarkEnergyMonitorSensor(
+            hass, config_entry, "Total Consumption", ENERGY_KILO_WATT_HOUR, "mdi:flash"
+        ),
+        StarkEnergyMonitorSensor(
+            hass, config_entry, "Real-Time Consumption", POWER_WATT, "mdi:flash-circle"
+        ),
+        # Add more sensors as needed
+    ]
+    async_add_entities(sensors, update_before_add=True)
