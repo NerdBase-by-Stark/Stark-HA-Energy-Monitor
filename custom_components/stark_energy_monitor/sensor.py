@@ -1,34 +1,63 @@
-from homeassistant.components.sensor import SensorEntity, SensorStateClass
-from homeassistant.const import ENERGY_KILO_WATT_HOUR, CURRENCY_DOLLAR
+import logging
+from homeassistant.helpers.entity import Entity
+from homeassistant.const import ENERGY_KILO_WATT_HOUR, POWER_WATT
+
 from .const import DOMAIN
 
-class TotalEnergySensor(SensorEntity):
-    def __init__(self, coordinator):
-        self.coordinator = coordinator
-        self._attr_name = "Total Energy Consumption"
-        self._attr_unique_id = "stark_energy_monitor_total_energy"
-        self._attr_native_unit_of_measurement = ENERGY_KILO_WATT_HOUR
-        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+_LOGGER = logging.getLogger(__name__)
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up Stark Energy Monitor sensors."""
+    sensors = [
+        StarkEnergyMonitorSensor(
+            hass, config_entry, "Total Consumption", ENERGY_KILO_WATT_HOUR, "mdi:flash"
+        ),
+        StarkEnergyMonitorSensor(
+            hass, config_entry, "Real-Time Consumption", POWER_WATT, "mdi:flash-circle"
+        ),
+        # Add more sensors as needed
+    ]
+    async_add_entities(sensors, update_before_add=True)
+
+class StarkEnergyMonitorSensor(Entity):
+    """Representation of a Stark Energy Monitor sensor."""
+
+    def __init__(self, hass, config_entry, name, unit, icon):
+        """Initialize the sensor."""
+        self._hass = hass
+        self._config = config_entry.data
+        self._name = name
+        self._unit = unit
+        self._icon = icon
+        self._state = None
 
     @property
-    def native_value(self):
-        return self.coordinator.data.get("total_energy", 0)
-
-class EnergyCostSensor(SensorEntity):
-    def __init__(self, coordinator):
-        self.coordinator = coordinator
-        self._attr_name = "Total Energy Cost"
-        self._attr_unique_id = "stark_energy_monitor_total_cost"
-        self._attr_native_unit_of_measurement = CURRENCY_DOLLAR
-        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+    def name(self):
+        """Return the name of the sensor."""
+        return self._name
 
     @property
-    def native_value(self):
-        return self.coordinator.data.get("total_cost", 0)
+    def state(self):
+        """Return the state."""
+        return self._state
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        TotalEnergySensor(coordinator),
-        EnergyCostSensor(coordinator),
-    ])
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement."""
+        return self._unit
+
+    @property
+    def icon(self):
+        """Return the icon."""
+        return self._icon
+
+    async def async_update(self):
+        """Fetch new state data for the sensor."""
+        try:
+            # Implement your data fetching logic here
+            # Example:
+            # self._state = await fetch_energy_data(self._config)
+            self._state = 0  # Placeholder value for testing
+        except Exception as e:
+            _LOGGER.error(f"Error updating sensor {self._name}: {e}")
+            self._state = None
