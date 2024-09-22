@@ -28,9 +28,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.config_entries.async_forward_entry_setup(entry, "binary_sensor")
     )
 
-    # Frontend panel registration is handled via manifest.json
-    # No need to manually register the frontend panel here
-
     _LOGGER.info("Stark Energy Monitor setup complete")
     return True
 
