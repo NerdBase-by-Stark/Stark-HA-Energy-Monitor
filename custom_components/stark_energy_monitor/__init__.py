@@ -2,6 +2,7 @@
 import logging
 import os
 import yaml
+import importlib
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryNotReady
@@ -19,6 +20,9 @@ async def async_setup(hass: HomeAssistant, config: dict):
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up Stark Energy Monitor from a config entry."""
     try:
+        # Use async execution to avoid blocking the event loop
+        await hass.async_add_executor_job(importlib.import_module, "custom_components.stark_energy_monitor.config_flow")
+
         # Initialize coordinator for handling updates
         coordinator = StarkEnergyMonitorCoordinator(hass)
         await coordinator.async_config_entry_first_refresh()
@@ -33,7 +37,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             if os.path.exists(dashboard_file_path):
                 with open(dashboard_file_path, 'r') as dashboard_file:
                     dashboard_config = yaml.safe_load(dashboard_file)
-                    # Here, you could modify YAML config if needed
                     _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
             else:
                 _LOGGER.warning(f"Dashboard YAML file not found at {dashboard_file_path}")
