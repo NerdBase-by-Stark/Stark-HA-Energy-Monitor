@@ -37,7 +37,10 @@ CONFIG_SCHEMA = vol.Schema({
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Stark Energy Monitor component."""
-    if AwesomeVersion(hass.config.version) < AwesomeVersion(MIN_HA_VERSION):
+    from homeassistant.const import __version__ as HA_VERSION
+    
+    # Ensure that Home Assistant version meets the minimum required
+    if AwesomeVersion(HA_VERSION) < AwesomeVersion(MIN_HA_VERSION):
         _LOGGER.error(f"Home Assistant version {MIN_HA_VERSION} or higher required.")
         return False
 
@@ -87,20 +90,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 async def handle_lovelace_dashboard(hass: HomeAssistant):
     """Handle Lovelace dashboard integration for Stark Energy Monitor."""
-    if "lovelace" in hass.data and hass.data["lovelace"].get("mode") != "storage":
-        dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
-        if os.path.exists(dashboard_file_path):
-            try:
-                with open(dashboard_file_path, 'r') as dashboard_file:
-                    dashboard_config = yaml.safe_load(dashboard_file)
-                    # Here you can add code to integrate the YAML dashboard if needed
-                    _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
-            except Exception as e:
-                _LOGGER.error(f"Failed to load YAML dashboard: {e}")
+    try:
+        lovelace_mode = hass.components.lovelace.mode  # Correct way to get mode
+        if lovelace_mode != "storage":
+            dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
+            if os.path.exists(dashboard_file_path):
+                try:
+                    with open(dashboard_file_path, 'r') as dashboard_file:
+                        dashboard_config = yaml.safe_load(dashboard_file)
+                        # Here you can add code to integrate the YAML dashboard if needed
+                        _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
+                except Exception as e:
+                    _LOGGER.error(f"Failed to load YAML dashboard: {e}")
+            else:
+                _LOGGER.warning(f"Dashboard YAML file not found at {dashboard_file_path}")
         else:
-            _LOGGER.warning(f"Dashboard YAML file not found at {dashboard_file_path}")
-    else:
-        _LOGGER.info("Lovelace is in storage mode; please add resources via UI.")
+            _LOGGER.info("Lovelace is in storage mode; please add resources via UI.")
+    except Exception as e:
+        _LOGGER.error(f"Error handling Lovelace dashboard: {e}")
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a config entry."""
