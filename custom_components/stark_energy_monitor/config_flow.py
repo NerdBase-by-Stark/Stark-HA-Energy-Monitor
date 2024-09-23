@@ -1,15 +1,17 @@
 import logging
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_NAME, CONF_ENTITY_ID, CONF_TARIFF
+from homeassistant.const import CONF_NAME, CONF_ENTITY_ID
 from homeassistant.core import callback
 from homeassistant.helpers import selector
+from homeassistant.helpers import aiohttp_client
+from homeassistant.helpers import config_validation as cv
 from .const import (
     DOMAIN,
     CONF_SAMPLE_INTERVAL,
     CONF_ENABLE_NOTIFICATIONS,
     CONF_DATA_RETENTION_DAYS,
-    CONF_TARIFFS,  # Ensure this is defined in const.py
+    CONF_TARIFFS,
     CONF_CRITICAL_DEVICES,
 )
 
@@ -65,6 +67,7 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Define the options flow."""
         return OptionsFlowHandler(config_entry)
 
+
 class OptionsFlowHandler(config_entries.OptionsFlow):
     """Handle options flow."""
 
@@ -75,3 +78,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
         """Manage the options."""
         return self.async_show_form(step_id="init")
+
+    async def async_import_config_flow(self):
+        """Handle importing config flow."""
+        # Moved the potentially blocking import operation to a separate thread
+        result = await self.hass.async_add_executor_job(
+            importlib.import_module, f"{self.pkg_path}.{platform_name}"
+        )
+        return result
