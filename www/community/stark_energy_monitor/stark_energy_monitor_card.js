@@ -1,4 +1,3 @@
-// stark_energy_monitor_card.js
 class StarkEnergyMonitorCard extends HTMLElement {
   set hass(hass) {
     if (!this._initialized) {

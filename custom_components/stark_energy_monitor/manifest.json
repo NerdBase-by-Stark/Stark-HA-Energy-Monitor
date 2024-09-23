@@ -7,11 +7,9 @@
   "requirements": ["voluptuous>=0.12.0"],
   "codeowners": ["@NerdBase-by-Stark"],
   "config_flow": true,
-  "single_config_entry": true,
   "iot_class": "local_polling",
   "integration_type": "hub",
   "quality_scale": "silver",
-  "issue_tracker": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor/issues",
   "loggers": ["stark_energy_monitor"],
   "homeassistant": "2023.10.0",
   "hacs": {
@@ -19,5 +17,11 @@
     "content_in_root": false,
     "render_readme": true,
     "zip_release": false
-  }
+  },
+  "resources": [
+    {
+      "type": "module",
+      "url": "/hacsfiles/stark_energy_monitor/stark_energy_monitor_card.js"
+    }
+  ]
 }
