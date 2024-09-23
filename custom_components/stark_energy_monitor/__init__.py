@@ -19,7 +19,7 @@ from .const import (
     CONF_SAMPLE_INTERVAL, 
     CONF_ENABLE_NOTIFICATIONS, 
     CONF_DATA_RETENTION_DAYS, 
-    MIN_HA_VERSION
+    MIN_HA_VERSION  # Make sure this is correctly referenced from const.py
 )
 from .coordinator import StarkEnergyMonitorCoordinator
 
@@ -57,13 +57,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             "coordinator": coordinator,
         }
 
-        # Register custom Lovelace panel
-        panel_file_path = hass.config.path("www/stark_energy_monitor/stark_energy_monitor.html")
+        # Define relative URL and local path to the HTML file
         panel_url = "/local/stark_energy_monitor/stark_energy_monitor.html"
+        panel_file_path = hass.config.path("www/stark_energy_monitor/stark_energy_monitor.html")
 
         if os.path.exists(panel_file_path):
             # Register the static path for the custom panel
-            hass.http.register_static_path(panel_url, panel_file_path)
+            hass.http.register_static_path(panel_url, panel_file_path, cache_headers=False)
+            
             # Register the panel in the Home Assistant frontend
             hass.components.frontend.async_register_built_in_panel(
                 "iframe",
@@ -76,10 +77,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         else:
             _LOGGER.warning(f"Panel HTML file not found at {panel_file_path}")
 
-        # Handle Lovelace in storage mode or YAML mode
+        # Continue with other setup steps
         await handle_lovelace_dashboard(hass)
-
-        # Register platforms (e.g., sensor)
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
         _LOGGER.info("Stark Energy Monitor setup complete.")
@@ -88,10 +87,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.error(f"Error setting up Stark Energy Monitor: {e}")
         raise ConfigEntryNotReady
 
+
 async def handle_lovelace_dashboard(hass: HomeAssistant):
     """Handle Lovelace dashboard integration for Stark Energy Monitor."""
     try:
-        lovelace_mode = hass.components.lovelace.mode  # Correct way to get mode
+        # Correct way to get the Lovelace mode
+        lovelace_mode = hass.data.get("lovelace", {}).get("mode", "storage")
         if lovelace_mode != "storage":
             dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
             if os.path.exists(dashboard_file_path):
