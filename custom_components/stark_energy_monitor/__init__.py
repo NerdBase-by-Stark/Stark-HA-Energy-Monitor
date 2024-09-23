@@ -5,7 +5,7 @@ import yaml
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.components.lovelace.const import MODE_STORAGE
+
 from .const import DOMAIN, PLATFORMS
 from .coordinator import StarkEnergyMonitorCoordinator
 
@@ -27,19 +27,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             "coordinator": coordinator,
         }
 
-        # Ensure Lovelace is in 'storage' mode before attempting to modify
-        if hass.data.get("lovelace", {}).get("mode") == MODE_STORAGE:
+        # Handle dashboard file if in YAML mode (skip for storage mode)
+        if "lovelace" in hass.data and hass.data["lovelace"]["mode"] != "storage":
             dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
             if os.path.exists(dashboard_file_path):
                 with open(dashboard_file_path, 'r') as dashboard_file:
                     dashboard_config = yaml.safe_load(dashboard_file)
-                    # Use Lovelace storage API
-                    await hass.components.lovelace.dashboard.async_update_config(dashboard_config)
-                    _LOGGER.info("Stark Energy Monitor dashboard loaded successfully.")
+                    # Here, you could modify YAML config if needed
+                    _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
             else:
                 _LOGGER.warning(f"Dashboard YAML file not found at {dashboard_file_path}")
         else:
-            _LOGGER.warning("Lovelace is not in storage mode; unable to auto-load the dashboard.")
+            _LOGGER.info("Lovelace is in storage mode; please add resources via UI.")
 
         # Register custom panel
         panel_file_path = hass.config.path("custom_components/stark_energy_monitor/panel/stark_energy_monitor.html")
