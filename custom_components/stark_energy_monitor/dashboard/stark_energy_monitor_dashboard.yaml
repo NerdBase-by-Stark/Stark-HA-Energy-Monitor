@@ -5,6 +5,7 @@ views:
     cards:
       - type: 'custom:stark-energy-monitor-card'
         entity: sensor.real_time_consumption
+        name: Real-Time Consumption
       - type: entities
         title: Energy Consumption
         entities:
