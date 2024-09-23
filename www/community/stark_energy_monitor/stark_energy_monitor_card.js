@@ -1,31 +1,12 @@
-class StarkEnergyMonitorCard extends HTMLElement {
-  set hass(hass) {
-    if (!this._initialized) {
-      const shadow = this.attachShadow({ mode: 'open' });
-      const card = document.createElement('ha-card');
-      card.header = 'Stark Energy Monitor';
+// www/community/stark_energy_monitor/stark_energy_monitor_card.js
+import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
 
-      const content = document.createElement('div');
-      content.style.padding = '16px';
-
-      const consumption = document.createElement('div');
-      consumption.id = 'consumption';
-      consumption.innerHTML = 'Real-Time Consumption: -- W';
-
-      content.appendChild(consumption);
-      card.appendChild(content);
-      shadow.appendChild(card);
-
-      this._consumptionElement = consumption;
-      this._initialized = true;
-    }
-
-    const entityId = this.config.entity;
-    const state = hass.states[entityId];
-    if (state) {
-      this._consumptionElement.innerHTML =
-        `Real-Time Consumption: ${state.state} ${state.attributes.unit_of_measurement || 'W'}`;
-    }
+class StarkEnergyMonitorCard extends LitElement {
+  static get properties() {
+    return {
+      hass: {},
+      config: {},
+    };
   }
 
   setConfig(config) {
@@ -33,6 +14,26 @@ class StarkEnergyMonitorCard extends HTMLElement {
       throw new Error('You need to define an entity');
     }
     this.config = config;
+  }
+
+  render() {
+    const entityId = this.config.entity;
+    const stateObj = this.hass.states[entityId];
+
+    if (!stateObj) {
+      return html`<ha-card>Entity not found: ${entityId}</ha-card>`;
+    }
+
+    const consumption = stateObj.state;
+    const unit = stateObj.attributes.unit_of_measurement || 'W';
+
+    return html`
+      <ha-card header="Stark Energy Monitor">
+        <div style="padding: 16px;">
+          Real-Time Consumption: ${consumption} ${unit}
+        </div>
+      </ha-card>
+    `;
   }
 
   getCardSize() {

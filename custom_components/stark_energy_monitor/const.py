@@ -13,3 +13,4 @@ CONF_TARIFFS = "tariffs"  # Added for tariff support
 CONF_CRITICAL_DEVICES = "critical_devices"  # Added for critical device monitoring
 CONF_SOLAR_INTEGRATION = "solar_integration"
 CONF_BATTERY_INTEGRATION = "battery_integration"
+MIN_HA_VERSION = "2023.10.0"  # Define the minimum Home Assistant version required
