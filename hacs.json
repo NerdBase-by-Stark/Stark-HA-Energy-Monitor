@@ -5,5 +5,4 @@
   "render_readme": true,
   "zip_release": false,
   "filename": "custom_components/stark_energy_monitor/manifest.json",
-  "iot_class": "Local Polling"
 }
