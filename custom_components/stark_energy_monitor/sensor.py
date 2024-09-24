@@ -1,5 +1,6 @@
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.sensor import SensorEntity
+from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up Stark Energy Monitor sensors."""
