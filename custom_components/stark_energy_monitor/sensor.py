@@ -1,5 +1,6 @@
 # sensor.py
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.components.sensor import SensorEntity
 
 class StarkEnergyMonitorSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Stark Energy Monitor sensor."""

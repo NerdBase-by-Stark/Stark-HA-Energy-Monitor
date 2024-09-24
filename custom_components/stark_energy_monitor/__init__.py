@@ -10,7 +10,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, CONF_NAME
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.discovery import async_load_platform
-from homeassistant.components.frontend import DOMAIN as FRONTEND_DOMAIN
 from homeassistant.helpers import aiohttp_client
 
 from .const import (
@@ -19,7 +18,7 @@ from .const import (
     CONF_SAMPLE_INTERVAL, 
     CONF_ENABLE_NOTIFICATIONS, 
     CONF_DATA_RETENTION_DAYS, 
-    MIN_HA_VERSION  # Make sure this is correctly referenced from const.py
+    MIN_HA_VERSION
 )
 from .coordinator import StarkEnergyMonitorCoordinator
 
@@ -57,14 +56,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             "coordinator": coordinator,
         }
 
-        # Define relative URL and local path to the HTML file
-        panel_url = "/local/stark_energy_monitor/stark_energy_monitor.html"
+        # Register custom Lovelace panel
         panel_file_path = hass.config.path("www/stark_energy_monitor/stark_energy_monitor.html")
+        panel_url = "/local/stark_energy_monitor/stark_energy_monitor.html"
 
         if os.path.exists(panel_file_path):
             # Register the static path for the custom panel
-            hass.http.register_static_path(panel_url, panel_file_path, cache_headers=False)
-            
+            hass.http.register_static_path(panel_url, panel_file_path)
             # Register the panel in the Home Assistant frontend
             hass.components.frontend.async_register_built_in_panel(
                 "iframe",
@@ -77,8 +75,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         else:
             _LOGGER.warning(f"Panel HTML file not found at {panel_file_path}")
 
-        # Continue with other setup steps
+        # Handle Lovelace in storage mode or YAML mode
         await handle_lovelace_dashboard(hass)
+
+        # Updated: Load platforms using async_forward_entry_setups
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
         _LOGGER.info("Stark Energy Monitor setup complete.")
@@ -87,19 +87,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.error(f"Error setting up Stark Energy Monitor: {e}")
         raise ConfigEntryNotReady
 
-
 async def handle_lovelace_dashboard(hass: HomeAssistant):
     """Handle Lovelace dashboard integration for Stark Energy Monitor."""
     try:
-        # Correct way to get the Lovelace mode
-        lovelace_mode = hass.data.get("lovelace", {}).get("mode", "storage")
+        # Using new method to handle Lovelace mode
+        lovelace_mode = hass.components.lovelace.mode  # Correct way to get mode
         if lovelace_mode != "storage":
             dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
             if os.path.exists(dashboard_file_path):
                 try:
                     with open(dashboard_file_path, 'r') as dashboard_file:
                         dashboard_config = yaml.safe_load(dashboard_file)
-                        # Here you can add code to integrate the YAML dashboard if needed
+                        # Code to integrate YAML dashboard
                         _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
                 except Exception as e:
                     _LOGGER.error(f"Failed to load YAML dashboard: {e}")
