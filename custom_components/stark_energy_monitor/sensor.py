@@ -1,6 +1,11 @@
-# sensor.py
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.sensor import SensorEntity
+
+async def async_setup_entry(hass, entry, async_add_entities):
+    """Set up Stark Energy Monitor sensors."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    sensors = [StarkEnergyMonitorSensor(coordinator, "Total Consumption", "kWh", "mdi:flash")]
+    async_add_entities(sensors)
 
 class StarkEnergyMonitorSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Stark Energy Monitor sensor."""
@@ -16,8 +21,3 @@ class StarkEnergyMonitorSensor(CoordinatorEntity, SensorEntity):
     def native_value(self):
         """Return the state of the sensor."""
         return self.coordinator.data.get(self._attr_name)
-
-    @property
-    def unique_id(self):
-        """Return a unique ID for the sensor."""
-        return f"stark_energy_monitor_{self._attr_name.lower().replace(' ', '_')}"

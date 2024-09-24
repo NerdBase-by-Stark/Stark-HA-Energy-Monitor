@@ -90,22 +90,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 async def handle_lovelace_dashboard(hass: HomeAssistant):
     """Handle Lovelace dashboard integration for Stark Energy Monitor."""
     try:
-        # Using new method to handle Lovelace mode
-        lovelace_mode = hass.components.lovelace.mode  # Correct way to get mode
-        if lovelace_mode != "storage":
-            dashboard_file_path = hass.config.path("custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml")
+        # Correctly retrieve the Lovelace mode in Home Assistant
+        frontend = hass.data.get("frontend")
+        
+        if frontend and frontend.lovelace_mode != "storage":
+            dashboard_file_path = hass.config.path(
+                "custom_components/stark_energy_monitor/dashboard/stark_energy_monitor_dashboard.yaml"
+            )
             if os.path.exists(dashboard_file_path):
                 try:
                     with open(dashboard_file_path, 'r') as dashboard_file:
                         dashboard_config = yaml.safe_load(dashboard_file)
-                        # Code to integrate YAML dashboard
                         _LOGGER.info("Loaded Stark Energy Monitor dashboard in YAML mode.")
                 except Exception as e:
                     _LOGGER.error(f"Failed to load YAML dashboard: {e}")
             else:
                 _LOGGER.warning(f"Dashboard YAML file not found at {dashboard_file_path}")
         else:
-            _LOGGER.info("Lovelace is in storage mode; please add resources via UI.")
+            _LOGGER.info("Lovelace is in storage mode; resources must be added manually.")
     except Exception as e:
         _LOGGER.error(f"Error handling Lovelace dashboard: {e}")
 
