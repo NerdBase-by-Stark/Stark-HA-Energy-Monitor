@@ -27,6 +27,7 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
         """Handle the initial step."""
         errors = {}
+
         if user_input is not None:
             try:
                 # Validate input here if needed
@@ -64,25 +65,42 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        """Define the options flow."""
-        return OptionsFlowHandler(config_entry)
+         """Get the options flow handler."""
+        return StarkEnergyMonitorOptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle options flow."""
+class StarkEnergyMonitorOptionsFlowHandler(config_entries.OptionsFlow):
+    """Handle options flow for Stark Energy Monitor."""
 
-    def __init__(self, config_entry):
-        """Initialize options flow."""
-        self.config_entry = config_entry
+def __init__(self, config_entry):
+    """Initialize options flow."""
+    self.config_entry = config_entry
 
-    async def async_step_init(self, user_input=None):
-        """Manage the options."""
-        return self.async_show_form(step_id="init")
+async def async_step_init(self, user_input=None):
+    """Manage the options."""
+    if user_input is not None:
+        # Save the updated options
+        return self.async_create_entry(title="", data=user_input)
 
-    async def async_import_config_flow(self):
-        """Handle importing config flow."""
-        # Moved the potentially blocking import operation to a separate thread
-        result = await self.hass.async_add_executor_job(
-            importlib.import_module, f"{self.pkg_path}.{platform_name}"
-        )
-        return result
+    return self.async_show_form(
+        step_id="init",
+        data_schema=vol.Schema({
+            vol.Optional(CONF_SAMPLE_INTERVAL, default=self.config_entry.options.get(CONF_SAMPLE_INTERVAL, 60)): vol.All(vol.Coerce(int), vol.Range(min=1, max=300)),
+            vol.Optional(CONF_ENABLE_NOTIFICATIONS, default=self.config_entry.options.get(CONF_ENABLE_NOTIFICATIONS, False)): bool,
+            vol.Optional(CONF_DATA_RETENTION_DAYS, default=self.config_entry.options.get(CONF_DATA_RETENTION_DAYS, 30)): vol.All(vol.Coerce(int), vol.Range(min=1)),
+            vol.Optional(CONF_TARIFFS, default=self.config_entry.options.get(CONF_TARIFFS)): selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=["manual", "sensor"],
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                    custom_value=True,
+                )
+            ),
+            vol.Optional(CONF_CRITICAL_DEVICES, default=self.config_entry.options.get(CONF_CRITICAL_DEVICES, [])): selector.EntitySelector(
+                selector.EntitySelectorConfig(
+                    multiple=True,
+                    device_class="sensor",
+                    domain="sensor",
+                )
+            ),
+        })
+    )
