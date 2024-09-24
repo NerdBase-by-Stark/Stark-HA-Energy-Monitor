@@ -3,6 +3,7 @@
   "name": "Stark Energy Monitor",
   "version": "1.0.0",
   "documentation": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor#readme",
+  "issue_tracker": "https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor/issues",
   "dependencies": [],
   "requirements": [],
   "codeowners": ["@NerdBase-by-Stark"],

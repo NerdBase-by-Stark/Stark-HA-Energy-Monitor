@@ -1,7 +1,6 @@
 {
   "name": "Stark Energy Monitor",
   "content_in_root": false,
-  "domains": ["stark_energy_monitor"],
   "homeassistant": "2023.10.0",
   "render_readme": true,
   "zip_release": false,
