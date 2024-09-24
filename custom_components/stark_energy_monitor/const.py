@@ -7,7 +7,7 @@ PLATFORMS = ["sensor", "binary_sensor", "switch"]
 
 CONF_MONITOR_NAME = "monitor_name"
 CONF_SAMPLE_INTERVAL = "sample_interval"
-#CONF_ENABLE_NOTIFICATIONS = "enable_notifications"
+CONF_ENABLE_NOTIFICATIONS = "enable_notifications"
 CONF_DATA_RETENTION_DAYS = "data_retention_days"
 CONF_TARIFFS = "tariffs"
 CONF_CRITICAL_DEVICES = "critical_devices"
