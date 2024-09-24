@@ -1,19 +1,10 @@
 #!/bin/bash
 
-# Deployment script for Stark Energy Monitor integration
-
 # Variables
 REPO_URL="https://github.com/NerdBase-by-Stark/Stark-HA-Energy-Monitor.git"
 HA_CONFIG_DIR="${1:-/config}"
 CUSTOM_COMPONENTS_DIR="$HA_CONFIG_DIR/custom_components"
 WWW_DIR="$HA_CONFIG_DIR/www/stark_energy_monitor"
-
-# Check if git is installed
-if ! command -v git &> /dev/null
-then
-    echo "Error: git is not installed. Please install git and rerun the script."
-    exit 1
-fi
 
 # Clone the repository
 if git clone "$REPO_URL" temp_stark_energy_monitor; then
@@ -23,7 +14,7 @@ else
     exit 1
 fi
 
-# Copy the custom component to Home Assistant
+# Copy the custom component files to Home Assistant
 if cp -r temp_stark_energy_monitor/custom_components/stark_energy_monitor "$CUSTOM_COMPONENTS_DIR/"; then
     echo "Custom component files copied successfully."
 else
@@ -37,6 +28,7 @@ if [ ! -d "$WWW_DIR" ]; then
     mkdir -p "$WWW_DIR"
 fi
 
+# Copy the HTML and other web resources to the www folder
 if cp -r temp_stark_energy_monitor/www/stark_energy_monitor/* "$WWW_DIR/"; then
     echo "Web resources copied successfully."
 else
