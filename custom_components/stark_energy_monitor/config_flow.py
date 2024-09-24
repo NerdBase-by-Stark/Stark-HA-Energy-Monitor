@@ -58,7 +58,7 @@ class StarkEnergyMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
                 ),
             }),
-            errors=errors
+            errors= {}
         )
 
     @staticmethod
